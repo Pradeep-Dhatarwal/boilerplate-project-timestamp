@@ -17,30 +17,32 @@ app.use(express.static('public'));
 app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
-app.get("/api/timestamp/", (req, res) => {
+app.get("/api/timestamp", (req, res) => {
   res.json({ unix: Date.now(), utc: Date() });
 });
 
 app.get("/api/timestamp/:date_string", (req, res) => {
   let recievedDate = req.params.date_string;
-  if (/\d{5,}/.test(recievedDate)) {
-    intDate = parseInt(recievedDate);
-    res.json({ 
-      unix: recievedDate,
-      utc: new Date(intDate).toUTCString() 
-    });
-  }
-  let finalDate = new Date(recievedDate);
-  if (finalDate.toString() === "Invalid Date") {
-    res.json({
-      error: "Invaid Date"
-    });
-  } else {
-    res.json({
-      unix: finalDate.valueOf(),
-      utc: finalDate.toUTCString()
-    });
-  }
+    if (/\d{5,}/.test(recievedDate)) {
+    let intDate = parseInt(recievedDate);
+      res.json({ 
+        unix: recievedDate,
+        utc: new Date(intDate).toUTCString() 
+      });
+    } else {
+      let finalDate = new Date(recievedDate);
+      if (finalDate.toString() === "Invalid Date") {
+      console.log("runs");
+        res.json({
+          error: "Invalid Date"
+        });
+      } else {
+        res.json({
+          unix: finalDate.valueOf(),
+          utc: finalDate.toUTCString()
+        });
+      }
+    }
 });
 
 
